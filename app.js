@@ -149,7 +149,7 @@
   /* ------------------------------------------------------------------ */
   // Paste the Web App URL you get after deploying the Google Apps Script
   // (see GOOGLE_SHEET_SETUP.md) between the quotes below.
-  var RSVP_ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbwXBeI8NXl2HCBiKRtcHe2xxRDOdxtX0bEtdmg239WyO82mT4uJGImT9AXLxsOdQpoA/exec";
+  var RSVP_ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbx7aHgNCKS55nqkYYgotFODn1jAJdTqCPI2n-lBMKkl9I4SW7eXRsFo4VuZa6AwTvvv/exec";
 
   var rsvpForm = document.getElementById('rsvpForm');
   var rsvpThanks = document.getElementById('rsvpThanks');
