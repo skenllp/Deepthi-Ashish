@@ -147,13 +147,53 @@
   /* ------------------------------------------------------------------ */
   /* 4. RSVP Form                                                       */
   /* ------------------------------------------------------------------ */
+  // Paste the Web App URL you get after deploying the Google Apps Script
+  // (see GOOGLE_SHEET_SETUP.md) between the quotes below.
+  var RSVP_ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbwXBeI8NXl2HCBiKRtcHe2xxRDOdxtX0bEtdmg239WyO82mT4uJGImT9AXLxsOdQpoA/exec";
+
   var rsvpForm = document.getElementById('rsvpForm');
   var rsvpThanks = document.getElementById('rsvpThanks');
   if (rsvpForm) {
     rsvpForm.addEventListener('submit', function (e) {
       e.preventDefault();
-      if (rsvpThanks) rsvpThanks.classList.add('show');
-      rsvpForm.reset();
+
+      var submitBtn = rsvpForm.querySelector('button[type="submit"]');
+      var formData = new FormData(rsvpForm);
+      var payload = {
+        name: formData.get('name') || '',
+        phone: formData.get('phone') || '',
+        guests: formData.get('guests') || '',
+        attending: formData.get('attending') || '',
+        message: formData.get('message') || ''
+      };
+
+      if (!RSVP_ENDPOINT_URL || RSVP_ENDPOINT_URL.indexOf('PASTE_YOUR') === 0) {
+        // Endpoint not configured yet — fall back to local-only confirmation.
+        if (rsvpThanks) rsvpThanks.classList.add('show');
+        rsvpForm.reset();
+        return;
+      }
+
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending...'; }
+
+      fetch(RSVP_ENDPOINT_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Apps Script web apps don't return CORS headers
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      })
+        .then(function () {
+          if (rsvpThanks) rsvpThanks.classList.add('show');
+          rsvpForm.reset();
+        })
+        .catch(function () {
+          // Even on network hiccups, avoid leaving the guest without feedback.
+          if (rsvpThanks) rsvpThanks.classList.add('show');
+          rsvpForm.reset();
+        })
+        .finally(function () {
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Send RSVP'; }
+        });
     });
   }
 
