@@ -647,6 +647,8 @@ main section {
   .rsvp-grid { grid-template-columns: 1fr 1fr; }
   .field-full { grid-column: 1/-1; }
 }
+
+.rsvp-card { max-width: 700px !important; }
 .field { display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; }
 .field span { letter-spacing: 0.12em; text-transform: uppercase; font-size: 0.65rem; color: var(--gold); }
 .field input, .field select, .field textarea {
